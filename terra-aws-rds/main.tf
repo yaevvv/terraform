@@ -10,11 +10,6 @@ data "aws_vpc" "default" {
 data "aws_subnet_ids" "all" {
   vpc_id = data.aws_vpc.default.id
 }
-
-# ---------------------------------------------------------------------------------------------------------------------
-# CREATE AN SUBNET GROUP ACROSS ALL THE SUBNETS OF THE DEFAULT ASG TO HOST THE RDS INSTANCE
-# ---------------------------------------------------------------------------------------------------------------------
-
 resource "aws_db_subnet_group" "example" {
   name       = var.name
   subnet_ids = data.aws_subnet_ids.all.ids
@@ -23,10 +18,6 @@ resource "aws_db_subnet_group" "example" {
     Name = var.name
   }
 }
-
-# ---------------------------------------------------------------------------------------------------------------------
-# CREATE A CUSTOM PARAMETER GROUP AND AN OPTION GROUP FOR CONFIGURABILITY
-# ---------------------------------------------------------------------------------------------------------------------
 
 resource "aws_db_option_group" "example" {
   name                 = var.name
@@ -60,11 +51,6 @@ resource "aws_db_parameter_group" "example" {
     value = "0"
   }
 }
-
-# ---------------------------------------------------------------------------------------------------------------------
-# CREATE A SECURITY GROUP TO ALLOW ACCESS TO THE RDS INSTANCE
-# ---------------------------------------------------------------------------------------------------------------------
-
 resource "aws_security_group" "db_instance" {
   name   = var.name
   vpc_id = data.aws_vpc.default.id
@@ -78,11 +64,6 @@ resource "aws_security_group_rule" "allow_db_access" {
   security_group_id = aws_security_group.db_instance.id
   cidr_blocks       = ["0.0.0.0/0"]
 }
-
-# ---------------------------------------------------------------------------------------------------------------------
-# CREATE THE DATABASE INSTANCE
-# ---------------------------------------------------------------------------------------------------------------------
-
 resource "aws_db_instance" "example" {
   identifier             = var.name
   engine                 = var.engine_name
