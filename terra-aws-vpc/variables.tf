@@ -1,4 +1,3 @@
-# variables.tf
 variable "region" {
      default = "us-east-1"
 }
@@ -34,4 +33,3 @@ variable "egressCIDRblock" {
 variable "mapPublicIP" {
     default = true
 }
-# end of variables.tf
